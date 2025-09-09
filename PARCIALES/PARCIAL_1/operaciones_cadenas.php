@@ -5,11 +5,26 @@ function contar_palabras_repetidas($texto)
     $textoLower = strtolower($texto);
     $textoArray = explode(" ", $textoLower);
 
-    for($i = 0; $i < count($textoArray); $i++) {
-        $textoArray[$i] = trim($textoArray[$i], ",.?!;:\"'()[]{}");
-
+    $contador = 0;
+    $enPalabra = false;
+    $longitud = strlen($texto);
+    for ($i = 0; $i < $longitud; $i++) {
+        
+        $caracter = $texto[$i];
+        if ($caracter === ' ' || $caracter === "\n" || $caracter === "\t") {
+            if ($enPalabra) {
+                $contador++;
+                $enPalabra = false;
+            }
+        } else {
+            $enPalabra = true;
+        }
     }
-    return $textoArray;
+    if ($enPalabra) {
+        $contador++;
+    }
+    return $contador;
+    // return implode(" ", $textoArray);
 }
 
 function capitalizar_palabras($texto)

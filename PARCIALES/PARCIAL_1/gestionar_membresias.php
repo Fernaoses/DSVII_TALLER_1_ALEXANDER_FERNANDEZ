@@ -61,3 +61,7 @@ $total = $subtotal - $descuento;
     <p>Total a pagar: <?php echo $total; ?></p>
 </body>
 </html>
+
+
+<!-- Para poder abrir este archivo, usa la siguiente URL:
+http://localhost/TALLERES/PARCIALES/PARCIAL_1/gestionar_membresias.php -->

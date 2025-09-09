@@ -35,3 +35,6 @@
     </table>
 </body>
 </html>
+
+<!-- Para poder abrir este archivo, usa la siguiente URL:
+http://localhost/TALLERES/PARCIALES/PARCIAL_1/procesador_de_frase.php -->

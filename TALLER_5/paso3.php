@@ -56,6 +56,37 @@ foreach ($conteoCalificaciones as $letra => $cantidad) {
 // TAREA: Implementa una función que identifique a los estudiantes que necesitan tutoría
 // (aquellos con un promedio menor a 75) y otra que liste a los estudiantes de honor
 // (aquellos con un promedio de 90 o más).
-// Tu código aquí
+function obtenerEstudiantesNecesitanTutoria(array $estudiantes, float $umbral = 75.0): array {
+    return array_values(array_filter($estudiantes, function ($estudiante) use ($umbral) {
+        return ($estudiante['promedio'] ?? 0) < $umbral;
+    }));
+}
+
+function obtenerEstudiantesHonor(array $estudiantes, float $umbral = 90.0): array {
+    return array_values(array_filter($estudiantes, function ($estudiante) use ($umbral) {
+        return ($estudiante['promedio'] ?? 0) >= $umbral;
+    }));
+}
+
+$estudiantesTutoria = obtenerEstudiantesNecesitanTutoria($estudiantes);
+$estudiantesHonor = obtenerEstudiantesHonor($estudiantes);
+
+echo "\nEstudiantes que necesitan tutoría:\n";
+if (count($estudiantesTutoria) === 0) {
+    echo "  Ningún estudiante requiere tutoría.\n";
+} else {
+    foreach ($estudiantesTutoria as $estudiante) {
+        echo "  - {$estudiante['nombre']} (Promedio: " . number_format($estudiante['promedio'], 2) . ")\n";
+    }
+}
+
+echo "\nEstudiantes de honor:\n";
+if (count($estudiantesHonor) === 0) {
+    echo "  Ningún estudiante está en la lista de honor.\n";
+} else {
+    foreach ($estudiantesHonor as $estudiante) {
+        echo "  - {$estudiante['nombre']} (Promedio: " . number_format($estudiante['promedio'], 2) . ")\n";
+    }
+}
 
 ?>

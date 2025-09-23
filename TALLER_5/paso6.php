@@ -88,6 +88,48 @@ echo "\nRegión con mayores ventas totales: $regionTopVentas\n";
 // TAREA: Implementa una función que analice el crecimiento de ventas
 // Calcula y muestra el porcentaje de crecimiento de ventas del primer al último mes
 // para cada producto en cada región. Identifica el producto y la región con mayor crecimiento.
-// Tu código aquí
+function calcularCrecimiento($ventas) {
+    $ventasIniciales = reset($ventas);
+    $ventasFinales = end($ventas);
+
+    if ($ventasIniciales == 0) {
+        return null;
+    }
+
+    return (($ventasFinales - $ventasIniciales) / $ventasIniciales) * 100;
+}
+
+echo "\nCrecimiento de ventas del primer al último mes por región y producto:\n";
+$mayorCrecimiento = null;
+$regionMayorCrecimiento = '';
+$productoMayorCrecimiento = '';
+
+foreach ($ventas as $region => $productos) {
+    echo "$region:\n";
+    foreach ($productos as $producto => $ventasProducto) {
+        $crecimiento = calcularCrecimiento($ventasProducto);
+
+        if ($crecimiento === null) {
+            echo "  $producto: Crecimiento no definido (ventas iniciales igual a 0)\n";
+            continue;
+        }
+
+        echo "  $producto: " . number_format($crecimiento, 2) . "%\n";
+
+        if ($mayorCrecimiento === null || $crecimiento > $mayorCrecimiento) {
+            $mayorCrecimiento = $crecimiento;
+            $regionMayorCrecimiento = $region;
+            $productoMayorCrecimiento = $producto;
+        }
+    }
+    echo "\n";
+}
+
+if ($mayorCrecimiento !== null) {
+    echo "Producto con mayor crecimiento: $productoMayorCrecimiento en la región $regionMayorCrecimiento con "
+        . number_format($mayorCrecimiento, 2) . "%\n";
+} else {
+    echo "No se pudo determinar el crecimiento debido a ventas iniciales igual a cero.\n";
+}
 
 ?>

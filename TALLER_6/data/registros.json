@@ -1,0 +1,15 @@
+[
+    {
+        "nombre": "alex",
+        "email": "alexwork2307@gmail.com",
+        "fecha_nacimiento": "1998-07-23",
+        "sitio_web": "https:\/\/github.com\/Fernaoses\/DSVII_TALLER_1_ALEXANDER_FERNANDEZ\/tree\/main\/TALLER_5",
+        "genero": "masculino",
+        "intereses": [
+            "deportes"
+        ],
+        "comentarios": "Nada",
+        "edad": 27,
+        "fecha_registro": "2025-09-29T21:39:50+02:00"
+    }
+]

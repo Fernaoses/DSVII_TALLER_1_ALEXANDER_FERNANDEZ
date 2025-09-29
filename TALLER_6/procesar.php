@@ -2,6 +2,12 @@
 require_once 'validaciones.php';
 require_once 'sanitizacion.php';
 
+function obtenerNombreFuncion(string $prefijo, string $campo): string {
+    $segmentos = explode('_', $campo);
+    $segmentosCapitalizados = array_map(fn($segmento) => ucfirst($segmento), $segmentos);
+    return $prefijo . implode('', $segmentosCapitalizados);
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $errores = [];
     $datos = [];
@@ -11,11 +17,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     foreach ($campos as $campo) {
         if (isset($_POST[$campo])) {
             $valor = $_POST[$campo];
-            $valorSanitizado = call_user_func("sanitizar" . ucfirst($campo), $valor);
+            // $valorSanitizado = call_user_func("sanitizar" . ucfirst($campo), $valor);
+
+            $funcionSanitizar = obtenerNombreFuncion('sanitizar', $campo);
+            if (function_exists($funcionSanitizar)) {
+                $valorSanitizado = call_user_func($funcionSanitizar, $valor);
+            } else {
+                $errores[] = "No se encontró la función de sanitización para $campo.";
+                $valorSanitizado = $valor;
+            }
+
             $datos[$campo] = $valorSanitizado;
 
-            if (!call_user_func("validar" . ucfirst($campo), $valorSanitizado)) {
-                $errores[] = "El campo $campo no es válido.";
+            // if (!call_user_func("validar" . ucfirst($campo), $valorSanitizado)) {
+            //     $errores[] = "El campo $campo no es válido.";
+            $funcionValidar = obtenerNombreFuncion('validar', $campo);
+            if (function_exists($funcionValidar)) {
+                if (!call_user_func($funcionValidar, $valorSanitizado)) {
+                    $errores[] = "El campo $campo no es válido.";
+                }
+            } else {
+                $errores[] = "No se encontró la función de validación para $campo.";
             }
         }
     }

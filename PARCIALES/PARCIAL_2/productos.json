@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "nombre": "Laptop Dell XPS 15",
+        "descripcion": "Laptop de alto rendimiento para trabajo profesional",
+        "estado": "disponible",
+        "stock": 15,
+        "fechaIngreso": "2024-08-15",
+        "categoria": "electronico",
+        "garantiaMeses": 24
+    },
+    {
+        "id": 2,
+        "nombre": "Cereal Integral Fitness",
+        "descripcion": "Cereal alto en fibra 500g",
+        "estado": "disponible",
+        "stock": 45,
+        "fechaIngreso": "2024-09-10",
+        "categoria": "alimento",
+        "fechaVencimiento": "2025-03-15"
+    },
+    {
+        "id": 3,
+        "nombre": "Camiseta Deportiva Nike",
+        "descripcion": "Camiseta Dri-FIT para entrenamiento",
+        "estado": "agotado",
+        "stock": 0,
+        "fechaIngreso": "2024-07-20",
+        "categoria": "ropa",
+        "talla": "M"
+    }
+]

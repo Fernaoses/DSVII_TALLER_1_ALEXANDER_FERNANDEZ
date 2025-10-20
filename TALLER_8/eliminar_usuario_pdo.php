@@ -3,16 +3,26 @@ require_once "config_pdo.php";
 
 $mensaje = "";
 
-if($_SERVER["REQUEST_METHOD"] === "POST"){
-    $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+try {
+    if($_SERVER["REQUEST_METHOD"] === "POST"){
+        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
 
-    if($id > 0){
-        $sql = "DELETE FROM usuarios WHERE id = :id";
+        if($id > 0){
+            $sql = "DELETE FROM usuarios WHERE id = :id";
 
-        if($stmt = $pdo->prepare($sql)){
+            $stmt = $pdo->prepare($sql);
+            if(!$stmt){
+                throw new Exception("Error al preparar la consulta.");
+            }
+
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
-            if($stmt->execute() && $stmt->rowCount() > 0){
+            $stmt->execute();
+            if ($stmt->errorCode() !== '00000') {
+                throw new Exception("Error en la consulta: " . $stmt->errorInfo()[2]);
+            }
+
+            if($stmt->rowCount() > 0){
                 $mensaje = "Usuario eliminado con éxito.";
             } else {
                 $mensaje = "No se pudo eliminar el usuario. Verifique el ID ingresado.";
@@ -20,11 +30,11 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 
             $stmt = null;
         } else {
-            $mensaje = "ERROR: No se pudo preparar la consulta.";
+            $mensaje = "Debe proporcionar un ID válido.";
         }
-    } else {
-        $mensaje = "Debe proporcionar un ID válido.";
     }
+} catch (Exception $e) {
+    $mensaje = "Se produjo un error: " . $e->getMessage();
 }
 
 $pdo = null;

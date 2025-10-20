@@ -3,20 +3,30 @@ require_once "config_pdo.php";
 
 $mensaje = "";
 
-if($_SERVER["REQUEST_METHOD"] === "POST"){
-    $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
-    $nombre = isset($_POST['nombre']) ? trim($_POST['nombre']) : '';
-    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+try {
+    if($_SERVER["REQUEST_METHOD"] === "POST"){
+        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+        $nombre = isset($_POST['nombre']) ? trim($_POST['nombre']) : '';
+        $email = isset($_POST['email']) ? trim($_POST['email']) : '';
 
-    if($id > 0 && !empty($nombre) && !empty($email)){
-        $sql = "UPDATE usuarios SET nombre = :nombre, email = :email WHERE id = :id";
+        if($id > 0 && !empty($nombre) && !empty($email)){
+            $sql = "UPDATE usuarios SET nombre = :nombre, email = :email WHERE id = :id";
 
-        if($stmt = $pdo->prepare($sql)){
+            $stmt = $pdo->prepare($sql);
+            if(!$stmt){
+                throw new Exception("Error al preparar la consulta.");
+            }
+
             $stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
             $stmt->bindParam(':email', $email, PDO::PARAM_STR);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
-            if($stmt->execute() && $stmt->rowCount() > 0){
+            $stmt->execute();
+            if ($stmt->errorCode() !== '00000') {
+                throw new Exception("Error en la consulta: " . $stmt->errorInfo()[2]);
+            }
+
+            if($stmt->rowCount() > 0){
                 $mensaje = "Usuario actualizado con éxito.";
             } else {
                 $mensaje = "No se pudo actualizar el usuario. Verifique el ID ingresado.";
@@ -24,11 +34,11 @@ if($_SERVER["REQUEST_METHOD"] === "POST"){
 
             $stmt = null;
         } else {
-            $mensaje = "ERROR: No se pudo preparar la consulta.";
+            $mensaje = "Todos los campos son obligatorios.";
         }
-    } else {
-        $mensaje = "Todos los campos son obligatorios.";
     }
+} catch (Exception $e) {
+    $mensaje = "Se produjo un error: " . $e->getMessage();
 }
 
 $pdo = null;

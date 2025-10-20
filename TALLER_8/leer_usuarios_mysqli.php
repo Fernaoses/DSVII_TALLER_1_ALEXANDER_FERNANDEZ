@@ -1,10 +1,14 @@
 <?php
 require_once "config_mysqli.php";
 
-$sql = "SELECT id, nombre, email, fecha_registro FROM usuarios";
-$result = mysqli_query($conn, $sql);
+try {
+    $sql = "SELECT id, nombre, email, fecha_registro FROM usuarios";
+    $result = mysqli_query($conn, $sql);
 
-if($result){
+    if(!$result){
+        throw new Exception("Error en la consulta: " . mysqli_error($conn));
+    }
+
     if(mysqli_num_rows($result) > 0){
         echo "<table>";
             echo "<tr>";
@@ -26,8 +30,8 @@ if($result){
     } else{
         echo "No se encontraron registros.";
     }
-} else{
-    echo "ERROR: No se pudo ejecutar $sql. " . mysqli_error($conn);
+} catch (Exception $e) {
+    echo "Se produjo un error: " . $e->getMessage();
 }
 
 mysqli_close($conn);

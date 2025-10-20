@@ -3,29 +3,42 @@ require_once "config_mysqli.php";
 
 $mensaje = "";
 
-if($_SERVER["REQUEST_METHOD"] === "POST"){
-    $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
-    $nombre = isset($_POST['nombre']) ? mysqli_real_escape_string($conn, $_POST['nombre']) : '';
-    $email = isset($_POST['email']) ? mysqli_real_escape_string($conn, $_POST['email']) : '';
+try {
+    $stmt = null;
 
-    if($id > 0 && !empty($nombre) && !empty($email)){
-        $sql = "UPDATE usuarios SET nombre = ?, email = ? WHERE id = ?";
+    if($_SERVER["REQUEST_METHOD"] === "POST"){
+        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+        $nombre = isset($_POST['nombre']) ? mysqli_real_escape_string($conn, $_POST['nombre']) : '';
+        $email = isset($_POST['email']) ? mysqli_real_escape_string($conn, $_POST['email']) : '';
 
-        if($stmt = mysqli_prepare($conn, $sql)){
+        if($id > 0 && !empty($nombre) && !empty($email)){
+            $sql = "UPDATE usuarios SET nombre = ?, email = ? WHERE id = ?";
+
+            $stmt = mysqli_prepare($conn, $sql);
+            if(!$stmt){
+                throw new Exception("Error al preparar la consulta: " . mysqli_error($conn));
+            }
+
             mysqli_stmt_bind_param($stmt, "ssi", $nombre, $email, $id);
 
-            if(mysqli_stmt_execute($stmt) && mysqli_stmt_affected_rows($stmt) > 0){
+            if(!mysqli_stmt_execute($stmt)){
+                throw new Exception("Error en la consulta: " . mysqli_error($conn));
+            }
+
+            if(mysqli_stmt_affected_rows($stmt) > 0){
                 $mensaje = "Usuario actualizado con éxito.";
             } else {
                 $mensaje = "No se pudo actualizar el usuario. Verifique el ID ingresado.";
             }
-
-            mysqli_stmt_close($stmt);
         } else {
-            $mensaje = "ERROR: No se pudo preparar la consulta. " . mysqli_error($conn);
+            $mensaje = "Todos los campos son obligatorios.";
         }
-    } else {
-        $mensaje = "Todos los campos son obligatorios.";
+    }
+} catch (Exception $e) {
+    $mensaje = "Se produjo un error: " . $e->getMessage();
+} finally {
+    if($stmt){
+        mysqli_stmt_close($stmt);
     }
 }
 

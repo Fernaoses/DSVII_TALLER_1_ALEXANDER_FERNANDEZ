@@ -3,27 +3,40 @@ require_once "config_mysqli.php";
 
 $mensaje = "";
 
-if($_SERVER["REQUEST_METHOD"] === "POST"){
-    $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+try {
+    $stmt = null;
 
-    if($id > 0){
-        $sql = "DELETE FROM usuarios WHERE id = ?";
+    if($_SERVER["REQUEST_METHOD"] === "POST"){
+        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
 
-        if($stmt = mysqli_prepare($conn, $sql)){
+        if($id > 0){
+            $sql = "DELETE FROM usuarios WHERE id = ?";
+
+            $stmt = mysqli_prepare($conn, $sql);
+            if(!$stmt){
+                throw new Exception("Error al preparar la consulta: " . mysqli_error($conn));
+            }
+
             mysqli_stmt_bind_param($stmt, "i", $id);
 
-            if(mysqli_stmt_execute($stmt) && mysqli_stmt_affected_rows($stmt) > 0){
+            if(!mysqli_stmt_execute($stmt)){
+                throw new Exception("Error en la consulta: " . mysqli_error($conn));
+            }
+
+            if(mysqli_stmt_affected_rows($stmt) > 0){
                 $mensaje = "Usuario eliminado con éxito.";
             } else {
                 $mensaje = "No se pudo eliminar el usuario. Verifique el ID ingresado.";
             }
-
-            mysqli_stmt_close($stmt);
         } else {
-            $mensaje = "ERROR: No se pudo preparar la consulta. " . mysqli_error($conn);
+            $mensaje = "Debe proporcionar un ID válido.";
         }
-    } else {
-        $mensaje = "Debe proporcionar un ID válido.";
+    }
+} catch (Exception $e) {
+    $mensaje = "Se produjo un error: " . $e->getMessage();
+} finally {
+    if($stmt){
+        mysqli_stmt_close($stmt);
     }
 }
 

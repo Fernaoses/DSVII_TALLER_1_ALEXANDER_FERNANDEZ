@@ -10,7 +10,13 @@ try {
             LIMIT 5";
 
     $stmt = $pdo->prepare($sqlUltimasPublicaciones);
+    if(!$stmt){
+        throw new Exception("No se pudo preparar la consulta de últimas publicaciones.");
+    }
     $stmt->execute();
+    if ($stmt->errorCode() !== '00000') {
+        throw new Exception("Error en la consulta de últimas publicaciones: " . $stmt->errorInfo()[2]);
+    }
 
     echo "<h3>Últimas 5 publicaciones:</h3>";
     $publicaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -31,7 +37,13 @@ try {
             WHERE p.id IS NULL";
 
     $stmt = $pdo->prepare($sqlUsuariosSinPublicaciones);
+    if(!$stmt){
+        throw new Exception("No se pudo preparar la consulta de usuarios sin publicaciones.");
+    }
     $stmt->execute();
+    if ($stmt->errorCode() !== '00000') {
+        throw new Exception("Error en la consulta de usuarios sin publicaciones: " . $stmt->errorInfo()[2]);
+    }
 
     echo "<h3>Usuarios sin publicaciones:</h3>";
     $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -53,7 +65,13 @@ try {
             ) AS conteos";
 
     $stmt = $pdo->prepare($sqlPromedioPublicaciones);
+    if(!$stmt){
+        throw new Exception("No se pudo preparar la consulta del promedio de publicaciones.");
+    }
     $stmt->execute();
+    if ($stmt->errorCode() !== '00000') {
+        throw new Exception("Error en la consulta del promedio de publicaciones: " . $stmt->errorInfo()[2]);
+    }
 
     echo "<h3>Promedio de publicaciones por usuario:</h3>";
     $promedio = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -76,7 +94,13 @@ try {
             ORDER BY u.nombre";
 
     $stmt = $pdo->prepare($sqlPublicacionRecientePorUsuario);
+    if(!$stmt){
+        throw new Exception("No se pudo preparar la consulta de publicación reciente por usuario.");
+    }
     $stmt->execute();
+    if ($stmt->errorCode() !== '00000') {
+        throw new Exception("Error en la consulta de publicación reciente por usuario: " . $stmt->errorInfo()[2]);
+    }
 
     echo "<h3>Publicación más reciente por usuario:</h3>";
     $recientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -95,7 +119,7 @@ try {
         echo "No se encontraron usuarios.<br>";
     }
 
-} catch (PDOException $e) {
+} catch (Exception $e) {
     echo "Error: " . $e->getMessage();
 }
 

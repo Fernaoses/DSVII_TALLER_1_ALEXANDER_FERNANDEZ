@@ -1,0 +1,135 @@
+{
+    "departments": [
+        {
+            "id": "dep_dir",
+            "name": "Dirección General",
+            "leader": "Laura Méndez",
+            "parent_id": null
+        },
+        {
+            "id": "dep_hr",
+            "name": "Recursos Humanos",
+            "leader": "Carlos Paredes",
+            "parent_id": "dep_dir"
+        },
+        {
+            "id": "dep_it",
+            "name": "Tecnología",
+            "leader": "Andrea Ríos",
+            "parent_id": "dep_dir"
+        },
+        {
+            "id": "dep_fin",
+            "name": "Finanzas",
+            "leader": "Marcelo Díaz",
+            "parent_id": "dep_dir"
+        }
+    ],
+    "employees": [
+        {
+            "id": "emp_001",
+            "name": "Ana Torres",
+            "role": "Analista de Nómina",
+            "department_id": "dep_fin",
+            "salary": 1200,
+            "email": "ana.torres@empresa.com"
+        },
+        {
+            "id": "emp_002",
+            "name": "Jorge Luna",
+            "role": "Especialista en RRHH",
+            "department_id": "dep_hr",
+            "salary": 1050,
+            "email": "jorge.luna@empresa.com"
+        },
+        {
+            "id": "emp_003",
+            "name": "María Prado",
+            "role": "Desarrolladora Fullstack",
+            "department_id": "dep_it",
+            "salary": 1500,
+            "email": "maria.prado@empresa.com"
+        },
+        {
+            "id": "emp_004",
+            "name": "Hernán Ortiz",
+            "role": "Administrador de Sistemas",
+            "department_id": "dep_it",
+            "salary": 1300,
+            "email": "hernan.ortiz@empresa.com"
+        },
+        {
+            "id": "emp_6938304877d19",
+            "name": "Alexander Fernandez",
+            "role": "Desarrollador",
+            "department_id": "dep_it",
+            "salary": 1500,
+            "email": "af@empres.com"
+        },
+        {
+            "id": "emp_69387e843022d",
+            "name": "Santa Maria",
+            "role": "Asistente",
+            "department_id": "dep_hr",
+            "salary": 900,
+            "email": "SM@empleado.com"
+        }
+    ],
+    "attendance": [
+        {
+            "id": "att_69382f8faa03b",
+            "employee_id": "emp_001",
+            "date": "2025-12-09",
+            "status": "Presente"
+        },
+        {
+            "id": "att_69382f8faa03e",
+            "employee_id": "emp_003",
+            "date": "2025-12-09",
+            "status": "Presente"
+        },
+        {
+            "id": "att_69383058471d5",
+            "employee_id": "emp_6938304877d19",
+            "date": "2025-12-09",
+            "status": "Presente"
+        }
+    ],
+    "payroll": [
+        {
+            "id": "pay_69382f8faa03f",
+            "employee_id": "emp_001",
+            "month": "2025-12",
+            "base": 1200,
+            "bonus": 120,
+            "deductions": 60
+        },
+        {
+            "id": "pay_69382f8faa040",
+            "employee_id": "emp_002",
+            "month": "2025-12",
+            "base": 1050,
+            "bonus": 90,
+            "deductions": 40
+        }
+    ],
+    "leaves": [
+        {
+            "id": "leave_69382f8faa041",
+            "employee_id": "emp_002",
+            "type": "Vacaciones",
+            "from": "2025-12-09",
+            "to": "2025-12-14",
+            "status": "Aprobado"
+        }
+    ],
+    "evaluations": [
+        {
+            "id": "eval_69382f8faa047",
+            "employee_id": "emp_003",
+            "period": "2024 Q4",
+            "score": 92,
+            "comments": "Entrega proyectos a tiempo y lidera revisiones de código."
+        }
+    ]
+}
